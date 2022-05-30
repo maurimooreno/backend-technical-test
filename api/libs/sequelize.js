@@ -14,7 +14,19 @@ const sequelize = new Sequelize(URI, {
 setupModels(sequelize);
 
 //Importar modelos en caso de relaciones
-// const {} = sequelize.models;
+const { Usuario, Pedido, Producto, Categoria } = sequelize.models;
+
+//Relacion many to many Producto/Categoria
+Producto.belongsToMany(Categoria, {through: "producto_categoria"})
+Categoria.belongsToMany(Producto, {through: "producto_categoria"})
+
+//Relacion many to many Producto/Pedido
+Pedido.belongsToMany(Producto, {through: "detalle_pedido"})
+Producto.belongsToMany(Pedido, {through: "detalle_pedido"})
+
+//Relacion one to many Usuario/Pedido
+Usuario.hasMany(Pedido, {onDelete: "cascade"})
+Pedido.belongsTo(Usuario)
 
 
 sequelize.sync({ force: false })

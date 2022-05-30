@@ -1,4 +1,4 @@
-function errorHandler(err, req, res, next) {
+function errorHandle(err, req, res, next) {
     if (!err.isBoom) {
         res.status(500).json({
             message: err.message,
@@ -10,7 +10,7 @@ function errorHandler(err, req, res, next) {
 
 }
 
-function boomErrorHandler(err, req, res, next) {
+function boomErrorHandle(err, req, res, next) {
     if (err.isBoom) {
         const { output } = err;
         res.status(output.statusCode).json(output.payload)
@@ -18,6 +18,6 @@ function boomErrorHandler(err, req, res, next) {
 }
 
 module.exports = {
-    errorHandler,
-    boomErrorHandler
+    errorHandle,
+    boomErrorHandle
 }
