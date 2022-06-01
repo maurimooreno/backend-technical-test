@@ -1,11 +1,14 @@
 const express = require('express');
+const passport = require('passport')
 const router = express.Router();
 const UsuarioServices = require('../services/usuario.services')
 const service = new UsuarioServices
 const validatorHandle = require('../middleware/validator.handle')
-const { crearUsuarioSchema, actualizarUsuarioSchema, mostrarUsuarioSchema } = require('../schemas/usuario.schema')
+const { checkApiKey } = require('../middleware/auth.handle');
+const { actualizarUsuarioSchema, mostrarUsuarioSchema } = require('../schemas/usuario.schema')
 
 router.get('/',
+    checkApiKey,
     async (req, res, next) => {
         try {
             const usuarios = await service.mostrarTodo()
@@ -15,19 +18,9 @@ router.get('/',
         }
     })
 
-router.post('/',
-    validatorHandle(crearUsuarioSchema, 'body'),
-    async (req, res, next) => {
-        try {
-            const info = req.body
-            const newUsuario = await service.crearUsuario(info)
-            res.status(201).json(newUsuario)
-        } catch (error) {
-            next(error)
-        }
-    })
-
 router.patch('/:id',
+    checkApiKey,
+    passport.authenticate('jwt', { session: false }),
     validatorHandle(mostrarUsuarioSchema, 'params'),
     validatorHandle(actualizarUsuarioSchema, 'body'),
     async (req, res, next) => {
@@ -42,6 +35,8 @@ router.patch('/:id',
     })
 
 router.delete('/:id',
+    checkApiKey,
+    passport.authenticate('jwt', { session: false }),
     validatorHandle(mostrarUsuarioSchema, 'params'),
     async (req, res, next) => {
         try {
@@ -51,6 +46,7 @@ router.delete('/:id',
         } catch (error) {
             next(error)
         }
-    })
+    }
+)
 
 module.exports = router

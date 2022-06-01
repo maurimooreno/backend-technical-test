@@ -6,7 +6,7 @@ const id = joi.string().guid({
         'uuidv5'
     ]
 })
-const isbn = joi.string().alphanum().min(10).max(13)
+const isbn = joi.string().min(10).max(13)
 const titulo = joi.string()
 const precio = joi.number().positive()
 const autor = joi.string()

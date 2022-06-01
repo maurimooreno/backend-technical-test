@@ -1,21 +1,35 @@
 const express = require('express');
+const passport = require('passport')
 const router = express.Router();
 const PedidoServices = require('../services/pedido.services')
 const service = new PedidoServices
 const validatorHandle = require('../middleware/validator.handle')
+const { checkApiKey } = require('../middleware/auth.handle');
 const { crearPedidoSchema, actualizarPedidoSchema, mostrarPedidoSchema } = require('../schemas/pedido.schema')
 
 router.get('/',
+    checkApiKey,
+    passport.authenticate('jwt', {session: false}),
     async (req, res, next) => {
         try {
-            const pedidos = await service.mostrarTodo()
-            res.status(200).json(pedidos)
+            const { id } = req.body
+            if (id) {
+                const pedido = await service.mostrarPedido(id)
+                res.status(200).json(pedido)
+            } else {
+                const pedidos = await service.mostrarTodoPedidos()
+                res.status(200).json(pedidos)
+            }
         } catch (error) {
             next(error)
         }
-    })
+    }
+)
+
 
 router.post('/',
+    checkApiKey,
+    passport.authenticate('jwt', {session: false}),
     validatorHandle(crearPedidoSchema, 'body'),
     async (req, res, next) => {
         try {
@@ -25,9 +39,12 @@ router.post('/',
         } catch (error) {
             next(error)
         }
-    })
+    }
+)
 
 router.patch('/:id',
+    checkApiKey,
+    passport.authenticate('jwt', {session: false}),
     validatorHandle(mostrarPedidoSchema, 'params'),
     validatorHandle(actualizarPedidoSchema, 'body'),
     async (req, res, next) => {
@@ -39,18 +56,7 @@ router.patch('/:id',
         } catch (error) {
             next(error)
         }
-    })
-
-router.delete('/:id',
-    validatorHandle(mostrarPedidoSchema, 'params'),
-    async (req, res, next) => {
-        try {
-            const id = req.params
-            const deletePedido = await service.eliminarPedido(id)
-            res.status(200).json(deletePedido)
-        } catch (error) {
-            next(error)
-        }
-    })
+    }
+)
 
 module.exports = router

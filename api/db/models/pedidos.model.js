@@ -10,16 +10,14 @@ const PedidoSchema = {
         allowNull: false,
         primaryKey: true,
     },
-    distribuidor: {
-        type: DataTypes.STRING
-    },
-    cantProducto: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     monto: {
         type: DataTypes.DECIMAL,
         allowNull: false
+    },
+    date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 
 }

@@ -1,5 +1,7 @@
 const boom = require('@hapi/boom');
-const { Producto } = require('../db/models/productos.model')
+const { Carrito } = require('../db/models/carrito.model');
+const { Producto } = require('../db/models/productos.model');
+const { Usuario } = require('../db/models/usuarios.model');
 
 class ProductoServices {
 
@@ -15,19 +17,19 @@ class ProductoServices {
     }
 
     async actualizarProducto(id, info) {
-        const updateProducto = await Producto.findByPk(id)
+        const idProdu = id
+        const updateProducto = await Producto.findOne({where: {id: idProdu}})
         if (!updateProducto) return boom.notFound("No existe ningun producto con ese ID")
         updateProducto.update(info)
         return updateProducto
     }
 
     async eliminarProducto(id) {
-        const findProducto = await Producto.findByPk(id)
+        const findProducto = await Producto.findOne({where: {id: id}})
         if (!findProducto) return boom.notFound("No existe ningun producto con ese ID")
         await findProducto.destroy()
         return {msg: "Producto eliminado con exito"}
     }
-
 }
 
 module.exports = ProductoServices

@@ -7,9 +7,9 @@ const id = joi.string().guid({
     ]
 })
 const nombre = joi.string().min(2).max(30)
-const password = joi.string().alphanum().min(8).max(15)
+const password = joi.string().min(8).max(15)
 const email = joi.string().email({ minDomainSegments: 2, tlds: { allow: false} })
-const direccion = joi.string().alphanum().min(2).max(40)
+const direccion = joi.string().min(2).max(40)
 const avatar = joi.string()
 
 const crearUsuarioSchema = joi.object({
