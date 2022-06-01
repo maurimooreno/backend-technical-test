@@ -5,7 +5,7 @@ const PedidoServices = require('../services/pedido.services')
 const service = new PedidoServices
 const validatorHandle = require('../middleware/validator.handle')
 const { checkApiKey } = require('../middleware/auth.handle');
-const { crearPedidoSchema, actualizarPedidoSchema, mostrarPedidoSchema } = require('../schemas/pedido.schema')
+const { crearPedidoSchema } = require('../schemas/pedido.schema')
 
 router.get('/',
     checkApiKey,
@@ -45,8 +45,6 @@ router.post('/',
 router.patch('/:id',
     checkApiKey,
     passport.authenticate('jwt', {session: false}),
-    validatorHandle(mostrarPedidoSchema, 'params'),
-    validatorHandle(actualizarPedidoSchema, 'body'),
     async (req, res, next) => {
         try {
             const id = req.params
