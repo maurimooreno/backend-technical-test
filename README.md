@@ -335,7 +335,7 @@ _Dicho token debe ir en el Bearer Token del header de cada request, a demas de l
 }
 ```
 
-## POTS /auth/singup/
+## POTS /auth/signup/
 
 ### Permite el registro de un nuevo usuario
 ### Es necesario pasar por body un objeto con el email, password y nombre
